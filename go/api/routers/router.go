@@ -8,15 +8,14 @@
 package routers
 
 import (
-    "api/controllers"
+	"api/controllers"
 
-    beego "github.com/beego/beego/v2/server/web"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 func init() {
-    ns := beego.NewNamespace("/v1")
-    beego.AddNamespace(ns)
+	ns := beego.NewNamespace("/v1")
+	beego.AddNamespace(ns)
 
-    beego.Router("/", &controllers.BaseController{})
+	beego.Router("/", &controllers.BaseController{})
 }
-

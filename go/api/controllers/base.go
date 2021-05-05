@@ -1,21 +1,35 @@
 package controllers
 
 import (
-    beego "github.com/beego/beego/v2/server/web"
+	"fmt"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 // BaseController operations for Base
 type BaseController struct {
-    beego.Controller
+	beego.Controller
 }
 
 // URLMapping ...
 func (c *BaseController) URLMapping() {
-    c.Mapping("Post", c.Post)
-    c.Mapping("GetOne", c.GetOne)
-    c.Mapping("GetAll", c.GetAll)
-    c.Mapping("Put", c.Put)
-    c.Mapping("Delete", c.Delete)
+	c.Mapping("Post", c.Post)
+	c.Mapping("GetOne", c.GetOne)
+	c.Mapping("GetAll", c.GetAll)
+	c.Mapping("Put", c.Put)
+	c.Mapping("Delete", c.Delete)
+}
+
+// @Title Create
+// @Description create Base
+// @Param    body        body     models.Base    true        "body for Base content"
+// @Success 201 {object} models.Base
+// @Failure 403 body is empty
+// @router / [post]
+func (c *BaseController) Get() {
+	fmt.Println("hoge")
+	// c.Ctx.Output.Body([]byte("shorturl"))
+	c.Data["json"] = map[string]string{"message": "hoge"}
+	c.ServeJSON()
 }
 
 // Post ...
