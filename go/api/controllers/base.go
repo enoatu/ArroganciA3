@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"fmt"
 	beego "github.com/beego/beego/v2/server/web"
+	"github.com/dghubble/go-twitter/twitter"
 )
 
 // BaseController operations for Base
@@ -26,6 +26,10 @@ func (c *BaseController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *BaseController) Get() {
+	// Search Tweets
+	search, resp, err := client.Search.Tweets(&twitter.SearchTweetParams{
+		Query: "gopher",
+	})
 	fmt.Println("hoge")
 	// c.Ctx.Output.Body([]byte("shorturl"))
 	c.Data["json"] = map[string]string{"message": "hoge"}
