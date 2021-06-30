@@ -14,8 +14,8 @@ services:
     build:
       context: ./etc/collector
     volumes:
+      - ./etc/collector/batch:/go/src/batch
       - ./etc/collector/batch/crontab:/etc/cron.d/root
-      - ./etc/collector/batch:/collector/src/batch
     env_file:
     # 指定しないと読んでくれない
      - ./.env

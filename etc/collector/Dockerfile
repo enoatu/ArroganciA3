@@ -16,9 +16,7 @@ RUN go get -u github.com/go-sql-driver/mysql
 COPY ./batch /go/src/batch
 WORKDIR /go/src/batch
 
-RUN go mod init
-
-#RUN go mod download
+RUN go mod download
 ## run時にgithub.com/astaxie/beegoで'missing go.sum entry'が出るので予め不要パッケージ削除
 #RUN go mod tidy
 
