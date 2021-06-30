@@ -10,6 +10,20 @@ services:
     tty: true
     depends_on:
       - db
+  collector:
+    build:
+      context: ./etc/collector
+    volumes:
+      - ./etc/collector/batch/crontab:/etc/cron.d/root
+      - ./etc/collector/batch:/collector/src/batch
+    env_file:
+    # 指定しないと読んでくれない
+     - ./.env
+    tty: true
+    # ttyつけても何故か落ちるので bashを対話モードで起動させる
+    command: /bin/sh -c "chmod 550 /etc/cron.d/root && /bin/bash"
+    depends_on:
+      - db
   db:
     build:
       context: ./db
@@ -25,3 +39,4 @@ services:
       #- ./MySQL/mysql_init:/docker-entrypoint-initdb.d
       #- ./MySQL/mysql_data:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-character-set-client-handshake
+
