@@ -7,7 +7,6 @@ services:
       - ./go/api/:/go/src/api
     ports:
       - 8080:8080
-    tty: true
     depends_on:
       - db
   collector:
@@ -17,7 +16,7 @@ services:
       - ./etc/collector/batch:/go/src/batch
       - ./etc/collector/batch/crontab:/etc/cron.d/root
     env_file:
-    # 指定しないと読んでくれない
+     # 指定しないと読んでくれない
      - ./.env
     tty: true
     # ttyつけても何故か落ちるので bashを対話モードで起動させる
@@ -34,7 +33,6 @@ services:
       MYSQL_PASSWORD: app
     ports:
       - 3306:3306
-    tty: true
     #volumes:
       #- ./MySQL/mysql_init:/docker-entrypoint-initdb.d
       #- ./MySQL/mysql_data:/var/lib/mysql
