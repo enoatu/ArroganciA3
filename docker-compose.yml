@@ -1,26 +1,15 @@
 version: '3.7'
 services:
-  go:
+  app:
     build:
-      context: ./go
+      context: ./app
     volumes:
-      - ./go/api/:/go/src/api
+      - ./app/arrogancia/:/go/src/arrogancia
     ports:
       - 8080:8080
-    depends_on:
-      - db
-  collector:
-    build:
-      context: ./etc/collector
-    volumes:
-      - ./etc/collector/batch:/go/src/batch
-      - ./etc/collector/batch/crontab:/etc/cron.d/root
     env_file:
      # 指定しないと読んでくれない
      - ./.env
-    tty: true
-    # ttyつけても何故か落ちるので bashを対話モードで起動させる
-    command: /bin/sh -c "chmod 550 /etc/cron.d/root && /bin/bash"
     depends_on:
       - db
   db:

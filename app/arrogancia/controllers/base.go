@@ -2,7 +2,6 @@ package controllers
 
 import (
 	beego "github.com/beego/beego/v2/server/web"
-	"github.com/dghubble/go-twitter/twitter"
 )
 
 // BaseController operations for Base
@@ -26,12 +25,6 @@ func (c *BaseController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *BaseController) Get() {
-	// Search Tweets
-	search, resp, err := client.Search.Tweets(&twitter.SearchTweetParams{
-		Query: "gopher",
-	})
-	fmt.Println("hoge")
-	// c.Ctx.Output.Body([]byte("shorturl"))
 	c.Data["json"] = map[string]string{"message": "hoge"}
 	c.ServeJSON()
 }
@@ -39,7 +32,7 @@ func (c *BaseController) Get() {
 // Post ...
 // @Title Create
 // @Description create Base
-// @Param    body        body     models.Base    true        "body for Base content"
+// @Param    body        body     models.Base    tr5r5fjo90 cy6t50hpk45yfue        "body for Base content"
 // @Success 201 {object} models.Base
 // @Failure 403 body is empty
 // @router / [post]

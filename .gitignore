@@ -1,3 +1,5 @@
 lastupdate.tmp
-.env
-go/api/api
+.env*
+app/arrogancia/arrogancia
+*node_modules
+!.env.encrypt

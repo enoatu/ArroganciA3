@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "prepare": "husky install"
+    "env-encrypt": "./misc/env/encrypt.sh",
+    "env-decrypt": "./misc/env/decrypt.sh",
+    "prepare": "husky install && yarn env-decrypt"
   },
   "husky": {
     "hooks": {
@@ -10,8 +12,7 @@
   },
   "lint-staged": {
     "*.go": [
-      "docker-compose exec -T go bash -c 'cd /go/src/api && gofmt -w .'",
-      "docker-compose exec -T go bash -c 'cd /go/src/batch && gofmt -w .'"
+      "docker-compose exec -T app bash -c 'cd /go/src/arrogancia && gofmt -w .'"
     ]
   },
   "devDependencies": {
