@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "lint-staged": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.go": [
+      "docker-compose exec -T go bash -c 'cd /go/src/api && gofmt -w .'",
+      "docker-compose exec -T go bash -c 'cd /go/src/batch && gofmt -w .'"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^7.0.0",
+    "lint-staged": "^11.0.0"
+  }
+}
