@@ -1,4 +1,5 @@
 {
+  "license": "MIT",
   "scripts": {
     "env-encrypt": "./misc/env/encrypt.sh",
     "env-decrypt": "./misc/env/decrypt.sh",
