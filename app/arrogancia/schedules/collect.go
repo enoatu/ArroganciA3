@@ -4,7 +4,7 @@ package main
 // go run: cannot run non-main package なので mainに
 import (
 	"arrogancia/tasks"
-	"fmt"
+	// "fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/toolbox"
 	"time"
@@ -12,7 +12,7 @@ import (
 
 func main() {
 	tk := toolbox.NewTask("collectTask", "* * * * * *", func() error {
-		fmt.Println("hello world")
+		// fmt.Println("hello world")
 		tasks.Collect()
 		return nil
 	})

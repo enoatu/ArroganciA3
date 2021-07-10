@@ -8,7 +8,7 @@
 package routers
 
 import (
-	"api/controllers"
+	"arrogancia/controllers"
 
 	beego "github.com/beego/beego/v2/server/web"
 )
