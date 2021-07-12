@@ -4,7 +4,7 @@ package main
 // go run: cannot run non-main package なので mainに
 import (
 	"arrogancia/tasks"
-	// "fmt"
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/toolbox"
 	"time"
