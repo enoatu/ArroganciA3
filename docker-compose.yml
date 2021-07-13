@@ -22,8 +22,8 @@ services:
       MYSQL_PASSWORD: app
     ports:
       - 23306:3306
-    #volumes:
-      #- ./MySQL/mysql_init:/docker-entrypoint-initdb.d
-      #- ./MySQL/mysql_data:/var/lib/mysql
+    volumes:
+      - ./etc/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./etc/mysql/ddl/:/docker-entrypoint-initdb.d/
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-character-set-client-handshake
 

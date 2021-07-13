@@ -4,6 +4,7 @@ import (
 	"arrogancia/services"
 	"fmt"
 	"github.com/beego/beego/v2/adapter/logs"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/dghubble/go-twitter/twitter"
 	"os"
 	"strconv"
@@ -38,7 +39,7 @@ func Collect() {
 	services.P(search.Statuses)
 	tweets := filterTweets(search.Statuses)
 	for _, v := range tweets {
-		fmt.Printf("SEARCH TWEETS:\n%+v\n", v)
+		spew.Dump(v)
 	}
 	lastTweet := tweets[len(tweets)-1]
 	logs.Info(lastTweet)
