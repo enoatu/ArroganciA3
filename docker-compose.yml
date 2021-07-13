@@ -11,19 +11,19 @@ services:
      # 指定しないと読んでくれない
      - ./.env
     depends_on:
-      - db
-  db:
-    build:
-      context: ./db
+      - mysql
+  mysql:
+    image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: app
       MYSQL_USER: app
       MYSQL_PASSWORD: app
     ports:
-      - 23306:3306
+      - 13306:3306
     volumes:
+      - mysql-data:/var/lib/mysql
       - ./etc/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./etc/mysql/ddl/:/docker-entrypoint-initdb.d/
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-character-set-client-handshake
-
+volumes:
+  mysql-data:
