@@ -2,11 +2,12 @@ FROM golang:1.16.3-buster
 MAINTAINER enoatu
 
 RUN apt-get update
+
+# サイズをへらす
 RUN apt-get install -y \
     git \
     unzip \
     tree \
-# サイズをへらす
     && apt-get clean
 
 RUN go get -u github.com/go-sql-driver/mysql
