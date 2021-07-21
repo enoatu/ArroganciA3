@@ -1,0 +1,6 @@
+#!/bin/sh
+go get -u github.com/go-sql-driver/mysql
+go get -u github.com/beego/bee/v2@v2.0.2
+go get -u github.com/beego/beego/v2@v2.0.1
+go mod download
+go mod tidy
