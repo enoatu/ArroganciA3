@@ -1,8 +1,6 @@
-USE arrogancia;
-
 CREATE TABLE IF NOT EXISTS tweet (
   id                INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
-  tweet_id          INT UNSIGNED NOT NULL                                                    COMMENT 'tweetのID',
+  tweet_id          BIGINT UNSIGNED NOT NULL                                                    COMMENT 'tweetのID',
   search_word_id    INT UNSIGNED NOT NULL                                                    COMMENT '検索ワードID',
   text              TEXT NOT NULL                                                            COMMENT 'ツイート本文',
   user_name         VARCHAR(255) NOT NULL                                                    COMMENT 'ユーザーネーム',

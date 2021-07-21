@@ -7,7 +7,7 @@ import (
 
 func init() {
 
-	beego.GlobalControllerRouter["api/controllers:BaseController"] = append(beego.GlobalControllerRouter["api/controllers:BaseController"],
+	beego.GlobalControllerRouter["arrogancia/controllers:BaseController"] = append(beego.GlobalControllerRouter["arrogancia/controllers:BaseController"],
 		beego.ControllerComments{
 			Method:           "Get",
 			Router:           "/",
@@ -16,7 +16,7 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
-	beego.GlobalControllerRouter["api/controllers:BaseController"] = append(beego.GlobalControllerRouter["api/controllers:BaseController"],
+	beego.GlobalControllerRouter["arrogancia/controllers:BaseController"] = append(beego.GlobalControllerRouter["arrogancia/controllers:BaseController"],
 		beego.ControllerComments{
 			Method:           "Post",
 			Router:           "/",
@@ -25,7 +25,7 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
-	beego.GlobalControllerRouter["api/controllers:BaseController"] = append(beego.GlobalControllerRouter["api/controllers:BaseController"],
+	beego.GlobalControllerRouter["arrogancia/controllers:BaseController"] = append(beego.GlobalControllerRouter["arrogancia/controllers:BaseController"],
 		beego.ControllerComments{
 			Method:           "GetAll",
 			Router:           "/",
@@ -34,7 +34,7 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
-	beego.GlobalControllerRouter["api/controllers:BaseController"] = append(beego.GlobalControllerRouter["api/controllers:BaseController"],
+	beego.GlobalControllerRouter["arrogancia/controllers:BaseController"] = append(beego.GlobalControllerRouter["arrogancia/controllers:BaseController"],
 		beego.ControllerComments{
 			Method:           "GetOne",
 			Router:           "/:id",
@@ -43,7 +43,7 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
-	beego.GlobalControllerRouter["api/controllers:BaseController"] = append(beego.GlobalControllerRouter["api/controllers:BaseController"],
+	beego.GlobalControllerRouter["arrogancia/controllers:BaseController"] = append(beego.GlobalControllerRouter["arrogancia/controllers:BaseController"],
 		beego.ControllerComments{
 			Method:           "Put",
 			Router:           "/:id",
@@ -52,7 +52,7 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
-	beego.GlobalControllerRouter["api/controllers:BaseController"] = append(beego.GlobalControllerRouter["api/controllers:BaseController"],
+	beego.GlobalControllerRouter["arrogancia/controllers:BaseController"] = append(beego.GlobalControllerRouter["arrogancia/controllers:BaseController"],
 		beego.ControllerComments{
 			Method:           "Delete",
 			Router:           "/:id",

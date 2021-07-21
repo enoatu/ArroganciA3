@@ -1,14 +1,17 @@
 package tasks
 
 import (
+	"arrogancia/models"
 	"arrogancia/services"
 	"fmt"
 	"github.com/beego/beego/v2/adapter/logs"
-	"github.com/davecgh/go-spew/spew"
+	"github.com/beego/beego/v2/client/orm"
+	_ "github.com/davecgh/go-spew/spew"
 	"github.com/dghubble/go-twitter/twitter"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -24,7 +27,6 @@ func Collect() {
 	// q => "検索ワード１　検索ワード２　-exclude:retweets -from:除外するユーザーID from:除外するユーザーID"
 	greedWordsQueryStr := greedWords{}.get().getQueryStr()
 	query := fmt.Sprintf("%s exclude:retweets exclude:replies filter:safe", greedWordsQueryStr)
-	logs.Warn(query)
 	searchTweetParams := &twitter.SearchTweetParams{
 		Query:     query,
 		TweetMode: "extended",
@@ -33,16 +35,35 @@ func Collect() {
 
 	search, _, err := client.Search.Tweets(searchTweetParams)
 	if err != nil {
-		logs.Warn(err)
+		logs.Error(err)
 		return
 	}
-	services.P(search.Statuses)
 	tweets := filterTweets(search.Statuses)
+	o := orm.NewOrm()
 	for _, v := range tweets {
-		spew.Dump(v)
+		// spew.Dump(v)
+		createdAt, err := v.CreatedAtTime()
+		if err != nil {
+			logs.Error(err)
+			return
+		}
+		tweetId, err := strconv.Atoi(v.ID)
+		tweetModel := &models.Tweet{
+			TweetId:        tweetId,
+			SearchWordId:   1,
+			Text:           v.FullText,
+			UserName:       v.User.Name,
+			UserScreenName: v.User.ScreenName,
+			CreatedAt:      createdAt,
+			CreatedOn:      time.Now(),
+		}
+		_, err = o.Insert(tweetModel)
+		if err != nil {
+			logs.Error(err)
+			return
+		}
 	}
-	lastTweet := tweets[len(tweets)-1]
-	logs.Info(lastTweet)
+	// lastTweet := tweets[len(tweets)-1]
 	// fmt.Printf("SEARCH METADATA:\n%+v\n", search.Metadata)
 }
 

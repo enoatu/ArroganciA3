@@ -7,8 +7,16 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/toolbox"
+	"github.com/beego/beego/v2/client/orm"
+	_ "github.com/go-sql-driver/mysql"
 	"time"
 )
+
+func init() {
+	orm.RegisterDriver("mysql", orm.DRMySQL)
+	sqlconn := beego.AppConfig.String("sqlconn")
+	orm.RegisterDataBase("default", "mysql", sqlconn)
+}
 
 func main() {
 	tk := toolbox.NewTask("collectTask", "* * * * * *", func() error {
