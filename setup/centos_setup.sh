@@ -16,8 +16,6 @@ sudo curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-c
 # 5. yarn last setup
 sudo curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
 sudo yum install -y nodejs
-exsh
 sudo npm install -g yarn
-exsh
 cd ArroganciA3
-yarn install
+/bin/yarn install
