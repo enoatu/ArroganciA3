@@ -1,7 +1,7 @@
 #!/usr/local/env bash
 
 << COMMENTOUT
-rm -rf ~ && sudo yum update -y && sudo yum install -y git && git clone https://github.com/enoatu/setup && ./setup/centos_setup.sh && git clone https://github.com/enoatu/ArroganciA3 && ./ArroganciA3/setup/centos_setup.sh
+rm -rf ~/* && sudo yum update -y && sudo yum install -y git && git clone https://github.com/enoatu/setup && ./setup/centos_setup.sh && git clone https://github.com/enoatu/ArroganciA3 && ./ArroganciA3/setup/centos_setup.sh
 COMMENTOUT
 
 # amazon linux2
