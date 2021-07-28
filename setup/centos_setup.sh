@@ -1,4 +1,4 @@
-#!/usr/local/env bash
+#!/usr/bin/env bash
 
 << COMMENTOUT
 sudo yum update -y && sudo yum install -y git && rm -rf ./setup && git clone https://github.com/enoatu/setup && ./setup/centos_setup.sh && rm -rf ./ArroganciA3 && git clone https://github.com/enoatu/ArroganciA3 && ./ArroganciA3/setup/centos_setup.sh

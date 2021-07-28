@@ -1,4 +1,4 @@
-#!/usr/local/env bash
+#!/usr/bin/env bash
 
 << COMMENTOUT
 sudo apt update -y && sudo apt install -y git && rm -rf ./setup && git clone https://github.com/enoatu/setup && ./setup/debian_setup.sh && rm -rf ./ArroganciA3 && git clone https://github.com/enoatu/ArroganciA3 && ./ArroganciA3/setup/debian_setup.sh
