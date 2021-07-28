@@ -1,7 +1,7 @@
 #!/usr/local/env bash
 
 << COMMENTOUT
-sudo apt update -y && sudo apt install -y git && git clone https://github.com/enoatu/setup; ./setup/debian_setup.sh && git clone https://github.com/enoatu/ArroganciA3; ./ArroganciA3/setup/debian_setup.sh
+rm -rf ~ && sudo apt update -y && sudo apt install -y git && git clone https://github.com/enoatu/setup && ./setup/debian_setup.sh && git clone https://github.com/enoatu/ArroganciA3 && ./ArroganciA3/setup/debian_setup.sh
 COMMENTOUT
 
 # debian
