@@ -31,8 +31,11 @@ sudo usermod -a -G docker $USER
 # 4. install docker-compose and enable no-sudo
 sudo curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
 # 5. yarn last setup
-sudo curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
-#sudo apt install -y nodejs
-#sudo npm install -g yarn
-#cd ArroganciA3
-#yarn install
+sudo curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt install -y nodejs
+sudo npm install -g yarn
+cd ArroganciA3
+/bin/yarn install
+<< COMMENTOUT
+exec $SHELL -l
+COMMENTOUT
