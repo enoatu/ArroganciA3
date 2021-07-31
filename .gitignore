@@ -1,5 +1,5 @@
 lastupdate.tmp
-.env*
+*.env*
 app/arrogancia/arrogancia
 *node_modules
 !.env.encrypt

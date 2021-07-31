@@ -3,7 +3,9 @@
   "scripts": {
     "env-encrypt": "./misc/env/encrypt.sh",
     "env-decrypt": "./misc/env/decrypt.sh",
-    "prepare": "husky install && yarn env-decrypt"
+    "prepare": "husky install",
+    "postinstall": "./misc/env/decrypt.sh"
+
   },
   "husky": {
     "hooks": {
@@ -17,6 +19,7 @@
     ]
   },
   "devDependencies": {
+    "multi-encrypt": "^1.0.4",
     "husky": "^7.0.0",
     "lint-staged": "^11.0.0"
   }
