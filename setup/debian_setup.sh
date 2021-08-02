@@ -35,7 +35,7 @@ sudo curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt install -y nodejs
 sudo npm install -g yarn
 cd ArroganciA3
-/bin/yarn install
+/usr/bin/yarn install
 << COMMENTOUT
 exec $SHELL -l
 COMMENTOUT
