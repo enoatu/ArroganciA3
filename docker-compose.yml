@@ -13,9 +13,9 @@ services:
     depends_on:
       - mysql
   mysql:
-    image: mysql:8.0
+    image: mysql:8.0.26
     environment:
-      TZ: Asia/Tokyo # for relove Fatal error: Illegal or unknown default time zone ‘Asia/Tokyo’ on debian
+      TZ: Asia/Tokyo # my.cnf参照
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: app
       MYSQL_USER: app
