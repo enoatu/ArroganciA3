@@ -18,4 +18,5 @@ sudo curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
 sudo yum install -y nodejs
 sudo npm install -g yarn
 cd ArroganciA3
+touch .env # for docker-compose up
 /bin/yarn install
