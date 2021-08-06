@@ -15,6 +15,10 @@ import (
 )
 
 func main() {
+	// flag.Parse()
+	// args := flag.Args()
+	// logs.Warn(args[0])
+	// Collect(string(args[0]))
 	Collect()
 }
 
@@ -26,7 +30,8 @@ func Collect() {
 	client := services.GetTwitterClient()
 	// q => "検索ワード１　検索ワード２　-exclude:retweets -from:除外するユーザーID from:除外するユーザーID"
 	greedWordsQueryStr := greedWords{}.get().getQueryStr()
-	query := fmt.Sprintf("%s exclude:retweets exclude:replies filter:safe", greedWordsQueryStr)
+	query := fmt.Sprintf("%s %s exclude:retweets exclude:replies filter:safe", "アプリ", greedWordsQueryStr)
+	logs.Warn(query)
 	searchTweetParams := &twitter.SearchTweetParams{
 		Query:     query,
 		TweetMode: "extended",
@@ -40,29 +45,32 @@ func Collect() {
 	}
 	tweets := filterTweets(search.Statuses)
 	o := orm.NewOrm()
+	tweetModels := []*models.Tweet{}
 	for _, v := range tweets {
-		// spew.Dump(v)
+		// spew.Dump(v.FullText)
 		createdAt, err := v.CreatedAtTime()
 		if err != nil {
 			logs.Error(err)
 			return
 		}
-		tweetId, err := strconv.Atoi(v.ID)
 		tweetModel := &models.Tweet{
-			TweetId:        tweetId,
+			TweetId:        v.ID,
 			SearchWordId:   1,
-			Text:           v.FullText,
+			Body:           v.FullText,
 			UserName:       v.User.Name,
 			UserScreenName: v.User.ScreenName,
 			CreatedAt:      createdAt,
 			CreatedOn:      time.Now(),
 		}
-		_, err = o.Insert(tweetModel)
-		if err != nil {
-			logs.Error(err)
-			return
-		}
+		tweetModels = append(tweetModels, tweetModel)
 	}
+	successCount, err := o.InsertMulti(len(tweets), tweetModels)
+	if err != nil {
+		logs.Error(err)
+		return
+	}
+	logs.Warn(len(tweets))
+	logs.Warn(successCount)
 	// lastTweet := tweets[len(tweets)-1]
 	// fmt.Printf("SEARCH METADATA:\n%+v\n", search.Metadata)
 }

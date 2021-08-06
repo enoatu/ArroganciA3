@@ -26,15 +26,13 @@ services:
       - mysql-data:/var/lib/mysql
       - ./etc/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./etc/mysql/ddl/:/docker-entrypoint-initdb.d/
-  #mysqldef:
-  #  image: diverse/mysqldef:latest
-  #  build:
-  #    args:
-  #      VERSION: "0.10.16"
-  #  entrypoint: ./bin/sh -c 'mysqldef --version;mysqldef -uroot -proot -hmysql arrogancia < /create_table'
-  #  volumes:
-  #    - ./etc/mysql/ddl/2_create_table.sql:/create_table
-  #  depends_on:
-  #    - mysql
+  mysqldef:
+    build:
+      context: etc/mysqldef
+    command: '-uroot -proot -hmysql --file=/create_table arrogancia'
+    volumes:
+      - ./etc/mysql/ddl/2_create_table.sql:/create_table
+    depends_on:
+      - mysql
 volumes:
   mysql-data:

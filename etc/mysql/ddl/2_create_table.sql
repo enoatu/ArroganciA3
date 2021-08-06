@@ -1,15 +1,16 @@
 CREATE TABLE IF NOT EXISTS tweet (
   id                INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
-  tweet_id          BIGINT UNSIGNED NOT NULL                                                    COMMENT 'tweetのID',
+  tweet_id          BIGINT UNSIGNED NOT NULL                                                 COMMENT 'tweetのID',
   search_word_id    INT UNSIGNED NOT NULL                                                    COMMENT '検索ワードID',
-  text              TEXT NOT NULL                                                            COMMENT 'ツイート本文',
+  body              TEXT NOT NULL                                                            COMMENT 'ツイート本文',
   user_name         VARCHAR(255) NOT NULL                                                    COMMENT 'ユーザーネーム',
   user_screen_name  VARCHAR(255) NOT NULL                                                    COMMENT 'ユーザースクリーンネーム',
+  optimize_level    TINYINT NOT NULL                                                         COMMENT '最適化レベル',
   created_at        DATETIME NOT NULL                                                        COMMENT 'ツイート作成日時',
   created_on        DATETIME NOT NULL                                                        COMMENT '作成日時',
   modified_on       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id),
-  KEY tweet_index01 (search_word_id)
+  KEY tweet_index01 (search_word_id, optimize_level)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='ツイート';
 
 CREATE TABLE IF NOT EXISTS search_word (
