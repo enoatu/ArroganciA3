@@ -83,12 +83,10 @@ func (ns ngWords) get() ngWords {
 		logs.Warn(err)
 		return ns
 	}
-	i := 2
-	for i < ngWordCount {
+	for i := 0; i < ngWordCount; i++ {
 		ngWordRawStrs := os.Getenv(fmt.Sprintf("NG_WORDS_%s", strconv.Itoa(i)))
 		ngWordRaws := strings.Split(ngWordRawStrs, ",")
 		ns = append(ns, ngWordRaws...)
-		i++
 	}
 	return ns
 }
