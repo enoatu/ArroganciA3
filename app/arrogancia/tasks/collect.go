@@ -6,73 +6,101 @@ import (
 	"fmt"
 	"github.com/beego/beego/v2/adapter/logs"
 	"github.com/beego/beego/v2/client/orm"
-	_ "github.com/davecgh/go-spew/spew"
 	"github.com/dghubble/go-twitter/twitter"
+	"math/rand"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func main() {
-	// flag.Parse()
-	// args := flag.Args()
-	// logs.Warn(args[0])
-	// Collect(string(args[0]))
-	Collect()
-}
-
 type ngWords []string
 type greedWords []string
 
-func Collect() {
-	// search tweets
-	client := services.GetTwitterClient()
-	// q => "検索ワード１　検索ワード２　-exclude:retweets -from:除外するユーザーID from:除外するユーザーID"
-	greedWordsQueryStr := greedWords{}.get().getQueryStr()
-	query := fmt.Sprintf("%s %s exclude:retweets exclude:replies filter:safe", "アプリ", greedWordsQueryStr)
-	logs.Warn(query)
-	searchTweetParams := &twitter.SearchTweetParams{
-		Query:     query,
-		TweetMode: "extended",
-		Count:     50,
-	}
+const TWEET_SEARCH_COUNT = 100
 
-	search, _, err := client.Search.Tweets(searchTweetParams)
-	if err != nil {
-		logs.Error(err)
-		return
-	}
-	tweets := filterTweets(search.Statuses)
+func Collect() {
+	searchWordId := 1
 	o := orm.NewOrm()
+
+	lastTweet := &models.Tweet{}
+	o.QueryTable("tweet").Filter("SearchWordId", searchWordId).OrderBy("-TweetId").One(lastTweet)
+
+	client := services.GetTwitterClient()
+
+	// q => "検索ワード１　検索ワード２　-exclude:retweets -from:除外するユーザーID from:除外するユーザーID"
+	query := fmt.Sprintf("%s %s exclude:retweets exclude:replies filter:safe", "アプリ", greedWords{}.get().getQueryStr())
+
+	maxTweetId := int64(0)
 	tweetModels := []*models.Tweet{}
-	for _, v := range tweets {
-		// spew.Dump(v.FullText)
-		createdAt, err := v.CreatedAtTime()
+	for {
+		// 最新のツイート => 古いツイート...の順で取得
+		// lastTweetId = 3
+		// count = 3
+		// 回)
+		// 1) 10, 9, 8 の順で取得
+		// 2) 7(maxTweetId = 7), 6 5
+		// 3) 4(maxTweetId = 4), (3(sinceID = lastTweetId))
+		// => 2回目以降、動的にmaxTweetIdを付け替える
+		searchTweetParams := &twitter.SearchTweetParams{
+			Query:     query,
+			TweetMode: "extended",
+			SinceID:   lastTweet.TweetId,
+			Count:     TWEET_SEARCH_COUNT, // max 100
+		}
+		if maxTweetId != 0 {
+			searchTweetParams.MaxID = maxTweetId - 1 // equal含む
+		}
+
+		search, _, err := client.Search.Tweets(searchTweetParams)
 		if err != nil {
 			logs.Error(err)
 			return
 		}
-		tweetModel := &models.Tweet{
-			TweetId:        v.ID,
-			SearchWordId:   1,
-			Body:           v.FullText,
-			UserName:       v.User.Name,
-			UserScreenName: v.User.ScreenName,
-			CreatedAt:      createdAt,
-			CreatedOn:      time.Now(),
+		if len(search.Statuses) == 0 {
+			// 0の時
+			break
 		}
-		tweetModels = append(tweetModels, tweetModel)
+
+		tweets := filterTweets(search.Statuses)
+		if len(tweets) == 0 {
+			logs.Warn("Not Found Update Tweet In Loop")
+			break
+		}
+		for _, v := range tweets {
+			createdAt, err := v.CreatedAtTime()
+			if err != nil {
+				logs.Error(err)
+				return
+			}
+			tweetModel := &models.Tweet{
+				TweetId:        v.ID,
+				SearchWordId:   searchWordId,
+				Body:           v.FullText,
+				UserName:       v.User.Name,
+				UserScreenName: v.User.ScreenName,
+				CreatedAt:      createdAt,
+				CreatedOn:      time.Now(),
+			}
+			tweetModels = append(tweetModels, tweetModel)
+		}
+
+		gotLastTweetId := search.Statuses[len(search.Statuses)-1].ID
+		if len(search.Statuses) < TWEET_SEARCH_COUNT {
+			// 抜ける
+			break
+		}
+		maxTweetId = gotLastTweetId
 	}
-	successCount, err := o.InsertMulti(len(tweets), tweetModels)
+	if len(tweetModels) == 0 {
+		return
+	}
+	_, err := o.InsertMulti(len(tweetModels), tweetModels)
 	if err != nil {
 		logs.Error(err)
 		return
 	}
-	logs.Warn(len(tweets))
-	logs.Warn(successCount)
-	// lastTweet := tweets[len(tweets)-1]
-	// fmt.Printf("SEARCH METADATA:\n%+v\n", search.Metadata)
+	logs.Info(fmt.Sprintf("%s added New Tweet", string(len(tweetModels))))
 }
 
 func (ns ngWords) get() ngWords {
@@ -92,10 +120,6 @@ func (ns ngWords) get() ngWords {
 }
 
 func (ns ngWords) getQueryStr() (queryStr string) {
-	if len(ns) < 2 {
-		logs.Warn(ns)
-		return
-	}
 	queryStr += "-" + strings.Join(ns, " -")
 	return
 }
@@ -104,6 +128,23 @@ func (gs greedWords) get() greedWords {
 	greedWordRawStrs := os.Getenv("GREED_WORDS")
 	gs = strings.Split(greedWordRawStrs, ",")
 	return gs
+}
+
+func (gs greedWords) filterRandom() (newGs greedWords) {
+	if len(gs) == 0 {
+		return gs
+	}
+	rand.Seed(time.Now().UnixNano()) // rand メソッドの前に実行しないと、Intnの結果が常に1になったりおかしくなる
+	num := rand.Intn(len(gs))
+	n := make(greedWords, len(gs))
+	copy(n, gs)
+
+	for i := 0; i < num; i++ {
+		index := rand.Intn(len(n))
+		newGs = append(newGs, n[index])
+		n = append(n[:index], n[index+1:]...)
+	}
+	return
 }
 
 func (gs greedWords) getQueryStr() (queryStr string) {

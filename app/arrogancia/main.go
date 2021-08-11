@@ -2,18 +2,19 @@ package main
 
 import (
 	_ "arrogancia/routers"
-	// _ "arrogancia/tasks"
+	"arrogancia/schedules"
 	// "github.com/davecgh/go-spew/spew"
 
+	"github.com/astaxie/beego/toolbox"
 	"github.com/beego/beego/v2/client/orm"
 	beego "github.com/beego/beego/v2/server/web"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
+	orm.RegisterDriver("mysql", orm.DRMySQL)
 	sqlconn, _ := beego.AppConfig.String("sqlconn")
-	// spew.Dump(sqlconn)
-	orm.RegisterDataBase("arrogancia", "mysql", sqlconn)
+	orm.RegisterDataBase("default", "mysql", sqlconn)
 }
 
 func main() {
@@ -21,5 +22,10 @@ func main() {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
+
+	toolbox.AddTask("collectTask", schedules.GetCollectTask())
+	toolbox.StartTask()
+	defer toolbox.StopTask()
+
 	beego.Run()
 }
