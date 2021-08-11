@@ -9,7 +9,7 @@ import (
 
 func GetCollectTask() *toolbox.Task {
 	isRunning := false
-	return toolbox.NewTask("collectTask", "30 * * * * *", func() error {
+	return toolbox.NewTask("collectTask", "0 0 * * * *", func() error {
 		if isRunning {
 			logs.Warn("running task skip...")
 			return nil

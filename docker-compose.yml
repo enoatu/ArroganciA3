@@ -34,5 +34,14 @@ services:
       - ./etc/mysql/ddl/2_create_table.sql:/create_table
     depends_on:
       - mysql
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   environment:
+  #     - PMA_ARBITRARY=1
+  #     - PMA_HOSTS=mysql
+  #     - PMA_USER=root
+  #     - PMA_PASSWORD=root # =MYSQL_ROOT_PASSWORD
+  #   ports:
+  #     - 28180:80
 volumes:
   mysql-data:
