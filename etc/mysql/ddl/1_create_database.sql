@@ -5,5 +5,5 @@ CREATE DATABASE IF NOT EXISTS arrogancia DEFAULT CHARACTER SET utf8mb4 DEFAULT C
 CREATE USER IF NOT EXISTS app IDENTIFIED BY 'app';
 GRANT SELECT, INSERT, UPDATE, DELETE ON arrogancia.* TO app;
 
---create_tableにはUSE入れると mysqldef使えない
+-- create_tableにはUSE入れると mysqldef使えない
 USE arrogancia;
