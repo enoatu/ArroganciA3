@@ -9,7 +9,7 @@ services:
       - 28080:8080
     env_file:
      # require for env reading
-     - ./.env
+     - ./app/arrogancia/.env
     depends_on:
       - mysql
   mysql:
