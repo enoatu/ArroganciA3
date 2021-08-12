@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"arrogancia/models"
+	_ "github.com/astaxie/beego/utils/pagination"
+	"github.com/beego/beego/v2/client/orm"
 	beego "github.com/beego/beego/v2/server/web"
 )
 
-// BaseController operations for Base
 type BaseController struct {
 	beego.Controller
 }
@@ -24,8 +26,13 @@ func (c *BaseController) URLMapping() {
 // @Success 201 {object} models.Base
 // @Failure 403 body is empty
 // @router / [post]
+
 func (c *BaseController) Get() {
-	c.Data["json"] = map[string]string{"message": "hoge"}
+	searchWordId := 1
+	o := orm.NewOrm()
+	tweets := []*models.Tweet{}
+	o.QueryTable("tweet").Filter("SearchWordId", searchWordId).All(&tweets)
+	c.Data["json"] = tweets
 	c.ServeJSON()
 }
 
