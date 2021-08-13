@@ -26,10 +26,20 @@ func Collect() {
 	lastTweet := &models.Tweet{}
 	o.QueryTable("tweet").Filter("SearchWordId", searchWordId).OrderBy("-TweetId").One(lastTweet)
 
+	denyTwitterUsers := []*models.DenyTwitterUser{}
+	o.QueryTable("deny_twitter_user").All(&denyTwitterUsers)
+	denyTwitterUsersByUserId := make(map[int64]int)
+	for _, v := range denyTwitterUsers {
+		denyTwitterUsersByUserId[v.UserId] = 1
+	}
+
 	client := services.GetTwitterClient()
 
 	// q => "検索ワード１　検索ワード２　-exclude:retweets -from:除外するユーザーID from:除外するユーザーID"
-	query := fmt.Sprintf("%s %s exclude:retweets exclude:replies filter:safe", "アプリ", greedWords{}.get().getQueryStr())
+	query := fmt.Sprintf(
+		"%s %s exclude:retweets exclude:replies filter:safe",
+		"アプリ",
+		greedWords{}.get().getQueryStr())
 
 	maxTweetId := int64(0)
 	tweetModels := []*models.Tweet{}
@@ -73,10 +83,15 @@ func Collect() {
 				logs.Error(err)
 				return
 			}
+			if _, ok := denyTwitterUsersByUserId[v.User.ID]; ok {
+				// 除外Twitterユーザーならスキップ
+				continue
+			}
 			tweetModel := &models.Tweet{
 				TweetId:        v.ID,
 				SearchWordId:   searchWordId,
 				Body:           v.FullText,
+				UserId:         v.User.ID,
 				UserName:       v.User.Name,
 				UserScreenName: v.User.ScreenName,
 				CreatedAt:      createdAt,
@@ -100,7 +115,7 @@ func Collect() {
 		logs.Error(err)
 		return
 	}
-	logs.Info(fmt.Sprintf("%s added New Tweet", string(len(tweetModels))))
+	logs.Info(fmt.Sprintf("%s added New Tweet", strconv.Itoa(len(tweetModels))))
 }
 
 func (ns ngWords) get() ngWords {

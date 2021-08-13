@@ -5,7 +5,6 @@ import (
 	"arrogancia/schedules"
 	// "github.com/davecgh/go-spew/spew"
 
-	"github.com/astaxie/beego/toolbox"
 	"github.com/beego/beego/v2/client/orm"
 	beego "github.com/beego/beego/v2/server/web"
 	_ "github.com/go-sql-driver/mysql"
@@ -23,9 +22,6 @@ func main() {
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
 
-	toolbox.AddTask("collectTask", schedules.GetCollectTask())
-	toolbox.StartTask()
-	defer toolbox.StopTask()
-
+	schedules.Start()
 	beego.Run()
 }
