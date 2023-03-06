@@ -20,11 +20,18 @@ type greedWords []string
 const TWEET_SEARCH_COUNT = 100
 
 func Collect() {
-	searchWordId := 1
+	searchWords := []*models.SearchWord{}
+	orm.NewOrm().QueryTable("search_word").All(&searchWords)
+	for _, searchWord := range searchWords {
+		CollectTweets(searchWord)
+	}
+}
+
+func CollectTweets(searchWord *models.SearchWord) {
 	o := orm.NewOrm()
 
 	lastTweet := &models.Tweet{}
-	o.QueryTable("tweet").Filter("SearchWordId", searchWordId).OrderBy("-TweetId").One(lastTweet)
+	o.QueryTable("tweet").Filter("SearchWordId", searchWord.Id).OrderBy("-TweetId").One(lastTweet)
 
 	denyTwitterUsers := []*models.DenyTwitterUser{}
 	o.QueryTable("deny_twitter_user").All(&denyTwitterUsers)
@@ -38,7 +45,7 @@ func Collect() {
 	// q => "検索ワード１　検索ワード２　-exclude:retweets -from:除外するユーザーID from:除外するユーザーID"
 	query := fmt.Sprintf(
 		"%s %s exclude:retweets exclude:replies filter:safe",
-		"アプリ",
+		searchWord.Name,
 		greedWords{}.get().getQueryStr())
 
 	maxTweetId := int64(0)
@@ -89,7 +96,7 @@ func Collect() {
 			}
 			tweetModel := &models.Tweet{
 				TweetId:        v.ID,
-				SearchWordId:   searchWordId,
+				SearchWordId:   searchWord.Id,
 				Body:           v.FullText,
 				UserId:         v.User.ID,
 				UserName:       v.User.Name,

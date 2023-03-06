@@ -15,7 +15,7 @@ func Start() {
 
 func GetCollectTweetTask() *toolbox.Task {
 	isRunning := false
-	return toolbox.NewTask("collectTweetTask", "0 0 * * * *", func() error {
+	return toolbox.NewTask("collectTweetTask", "0 * * * * *", func() error {
 		if isRunning {
 			logs.Warn("running CollectTweetTask skip...")
 			return nil

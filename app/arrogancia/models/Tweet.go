@@ -21,7 +21,7 @@ type Tweet struct {
 
 type SearchWord struct {
 	Id         int       `orm:"pk;column(id);auto" json:"id"`
-	Word       string    `orm:"unique;column(word)" description:"検索ワード" json:"word"`
+	Name       string    `orm:"unique;column(name)" description:"検索ワード" json:"name"`
 	CreatedOn  time.Time `orm:"column(created_on);type(datetime)" description:"作成日時" json:"-"`
 	ModifiedOn time.Time `orm:"column(modified_on);type(timestamp);auto_now_add" description:"最終更新日時" json:"-"`
 }

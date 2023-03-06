@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS tweet (
 
 CREATE TABLE IF NOT EXISTS search_word (
   id               INT UNSIGNED NOT NULL AUTO_INCREMENT                                     COMMENT 'ID',
-  word             VARCHAR(255) NOT NULL                                                    COMMENT '検索ワード',
+  name             VARCHAR(255) NOT NULL                                                    COMMENT '検索ワード',
   created_on       DATETIME NOT NULL                                                        COMMENT '作成日時',
   modified_on      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最終更新日時',
   PRIMARY KEY (id)
